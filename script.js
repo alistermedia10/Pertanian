@@ -64,24 +64,30 @@ let data = JSON.parse(localStorage.getItem('agriMasterPro_v6_topnav')) || {
     fields: [],
     harvests: [],
     expenses: 0,
-    theme: 'dark'
-				blogUrl:'https://alister10.blogspot.com'
+    theme: 'dark',
+    blogUrl: '', // Fitur Baru Blog
+    blogKeywords: 'pertanian, tani, sawah, panen' // Fitur Baru Filter
 };
 
 let currentFieldId = null;
 
 // --- SAVE FUNCTION ---
-function save() { localStorage.setItem('agriMasterPro_v6_topnav', JSON.stringify(data)); app.refresh(); }
+function save() { localStorage.setItem('agriMasterPro_v6_topnav', JSON.stringify(data)); }
 
 // --- NAVIGATION ---
 const nav = {
     to: (view) => {
         document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        document.getElementById('view-' + view).classList.add('active');
-        document.getElementById('nav-' + view).classList.add('active');
+        const targetView = document.getElementById('view-' + view);
+        const targetNav = document.getElementById('nav-' + view);
+        
+        if(targetView) targetView.classList.add('active');
+        if(targetNav) targetNav.classList.add('active');
+
         if(view === 'dashboard') app.renderDashboard();
         if(view === 'alat') tools.init();
+        if(view === 'blog') blog.fetch(); // Panggil blog saat masuk menu blog
     }
 };
 
@@ -93,11 +99,37 @@ const modal = {
 // --- APP LOGIC ---
 const app = {
     init: () => {
-        // Set Theme
+        // 1. Setup Dasar (Setiap Kali Load)
         document.documentElement.setAttribute('data-theme', data.theme || 'dark');
         tools.init();
         app.refresh();
         document.getElementById('f-date').valueAsDate = new Date();
+
+        // 2. Setup Input Blog (Anti-Duplikat Event)
+        const blogUrlInput = document.getElementById('setting-blog-url');
+        if(blogUrlInput) {
+            blogUrlInput.value = data.blogUrl || '';
+            blogUrlInput.onclick = function() {
+                data.blogUrl = this.value;
+                save();
+            };
+        }
+
+        const blogKeyInput = document.getElementById('setting-blog-keywords');
+        if(blogKeyInput) {
+            blogKeyInput.value = data.blogKeywords || '';
+            blogKeyInput.onclick = function() {
+                data.blogKeywords = this.value;
+                save();
+            };
+        }
+
+        // 3. Cek First Run (Hanya Sekali)
+        if (!localStorage.getItem('agri_master_v6_first_run')) {
+            // Anda bisa menambahkan alert("Selamat Datang...") di sini jika mau
+            console.log("App first run detected.");
+            localStorage.setItem('agri_master_v6_first_run', 'true');
+        }
     },
 
     toggleTheme: () => {
@@ -305,7 +337,6 @@ const app = {
         const f = data.fields.find(x=>x.id===fid);
         const p = data.catalog.find(x=>x.id==f.plantId);
         
-        // Calc Age
         const start = new Date(f.datePlanted);
         const now = new Date();
         const age = Math.ceil(Math.abs(now - start) / (1000 * 60 * 60 * 24));
@@ -316,7 +347,6 @@ const app = {
             <p class="sub">Tanggal Tanam: ${f.datePlanted} • Umur: <strong style="color:var(--primary); font-size:1.1rem;">${age} HST</strong></p>
         `;
 
-        // Render Timeline
         const tlContainer = document.getElementById('d-timeline');
         tlContainer.innerHTML = '';
         if(p.schedule) {
@@ -446,7 +476,6 @@ const catalog = {
         document.getElementById('pi-name').innerText = p.name;
         document.getElementById('pi-desc').innerText = p.desc || "Tidak ada deskripsi.";
         
-        // Show schedule reference
         const tl = document.getElementById('pi-timeline');
         if(p.schedule) {
             tl.innerHTML = `<h4 style="margin-bottom:10px;">Jadwal Referensi:</h4>` + 
@@ -524,12 +553,23 @@ const tools = {
     }
 };
 
-// --- DATA MANAGER ---
+// --- DATA MANAGER (Updated for Compatibility) ---
 const dataMgr = {
     backup: () => {
-        const str = "data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(data));
-        const a = document.createElement('a'); a.href=str; a.download="agri_v6_topnav.json"; document.body.appendChild(a); a.click(); a.remove();
-        alert("✅ Backup berhasil didownload!");
+        const jsonString = JSON.stringify(data, null, 2); 
+        const blob = new Blob([jsonString], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "backup_agrimaster.json"; 
+        document.body.appendChild(a);
+        a.click();
+        
+        setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
     },
     restore: (input) => {
         const file = input.files[0];
@@ -553,8 +593,139 @@ const dataMgr = {
     }
 };
 
+// --- BLOG LOGIC (New) ---
+const blog = {
+    fetch: () => {
+        const url = data.blogUrl;
+        const keywords = data.blogKeywords || ''; 
+        
+        const list = document.getElementById('blog-list');
+        const loader = document.getElementById('blog-loader');
+        const errorMsg = document.getElementById('blog-error');
+        
+        list.innerHTML = '';
+        
+        const keywordArray = keywords.toLowerCase().split(',').map(k => k.trim()).filter(k => k !== '');
+        
+        if(!url) {
+            list.innerHTML = `<div style="text-align:center; padding:20px; color:#888;"><div style="font-size:2rem;">📝</div><p>Belum ada blog yang diatur.</p><small>Masukkan URL Feed di menu Pengaturan.</small></div>`;
+            return;
+        }
+
+        document.getElementById('blog-status').style.display = 'block';
+        loader.style.display = 'inline';
+        errorMsg.style.display = 'none';
+
+        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+
+        fetch(proxyUrl)
+            .then(res => res.json())
+            .then(response => {
+                loader.style.display = 'none';
+                
+                if(response.status === 'ok') {
+                    const items = response.items;
+                    
+                    if(items.length === 0) {
+                        list.innerHTML = '<p style="text-align:center;">Tidak ada artikel ditemukan.</p>';
+                        return;
+                    }
+
+                    let count = 0;
+                    
+                    items.forEach(item => {
+                        const itemTitle = item.title.toLowerCase();
+                        const itemCategories = item.categories ? item.categories.join(" ").toLowerCase() : "";
+                        const combinedText = itemTitle + " " + itemCategories;
+
+                        const isMatch = keywordArray.length === 0 || keywordArray.some(keyword => combinedText.includes(keyword));
+
+                        if (isMatch) {
+                            if(count >= 5) return; 
+
+                            let imgUrl = 'https://picsum.photos/seed/agri/100/100'; 
+                            if(item.thumbnail) imgUrl = item.thumbnail;
+                            else if(item.enclosure && item.enclosure.link) imgUrl = item.enclosure.link;
+
+                            const date = new Date(item.pubDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+
+                            list.innerHTML += `
+                                <a href="${item.link}" target="_blank" class="blog-card">
+                                    <img src="${imgUrl}" class="blog-thumb" onerror="this.src='https://picsum.photos/seed/agri/100/100'">
+                                    <div class="blog-info">
+                                        <div class="blog-title">${item.title}</div>
+                                        <div class="blog-desc">${item.description.replace(/<[^>]*>?/gm, '').substring(0, 60)}...</div>
+                                        <div class="blog-meta">
+                                            <span>📅 ${date}</span>
+                                            <span>👁️ Baca</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                            count++;
+                        }
+                    });
+
+                    if(count === 0) {
+                        list.innerHTML = '<p style="text-align:center; color:#888;">Tidak ada artikel yang cocok dengan kata kunci.</p>';
+                    }
+
+                } else {
+                    throw new Error('Feed tidak valid');
+                }
+            })
+            .catch(err => {
+                loader.style.display = 'none';
+                errorMsg.style.display = 'inline';
+                console.error(err);
+            });
+    }
+};
+
 // --- INIT APP ---
 app.init();
+
 document.querySelectorAll('.modal').forEach(m => {
     m.addEventListener('click', (e) => { if(e.target === m) modal.close(); });
 });
+app.init = () => {
+    // --- 1. KODE YANG DIJALANKAN SETIAP KALI REFRESH (WAJIB) ---
+    // Ini wajib jalan setiap kali buka aplikasi agar tampilan update
+    document.documentElement.setAttribute('data-theme', data.theme || 'dark');
+    tools.init();
+    app.refresh();
+    document.getElementById('f-date').valueAsDate = new Date();
+
+    // Load & Simpan URL Blog
+    if(document.getElementById('setting-blog-url')) {
+        document.getElementById('setting-blog-url').value = data.blogUrl || '';
+        document.getElementById('setting-blog-url').addEventListener('change', function(e) {
+            data.blogUrl = e.target.value;
+            save();
+        });
+    }
+
+    // Load & Simpan Kata Kunci Blog
+    if(document.getElementById('setting-blog-keywords')) {
+        document.getElementById('setting-blog-keywords').value = data.blogKeywords || '';
+        document.getElementById('setting-blog-keywords').addEventListener('change', function(e) {
+            data.blogKeywords = e.target.value;
+            save();
+        });
+    }
+
+    // --- 2. KODE YANG HANYA DIJALANKAN SEKALI SAJA (PERTAMA KALI) ---
+    const firstRunKey = 'agri_master_v6_first_run';
+    
+    if (!localStorage.getItem(firstRunKey)) {
+        // Tulis kode khusus untuk pertama kali buka di sini
+        // Contoh: Alert Selamat Datang
+        console.log("Ini adalah kali pertama aplikasi dibuka!");
+        
+        // Anda bisa menambahkan logika lain, misal:
+        // modal.open('modal-welcome'); // Jika Anda punya modal tutorial
+        
+        // SIMPAN TANDA bahwa aplikasi sudah pernah dibuka
+        localStorage.setItem(firstRunKey, 'true');
+    }
+};
