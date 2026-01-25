@@ -688,7 +688,7 @@ app.init();
 document.querySelectorAll('.modal').forEach(m => {
     m.addEventListener('click', (e) => { if(e.target === m) modal.close(); });
 });
-app.init = () => {
+ {
     // --- 1. KODE YANG DIJALANKAN SETIAP KALI REFRESH (WAJIB) ---
     // Ini wajib jalan setiap kali buka aplikasi agar tampilan update
     document.documentElement.setAttribute('data-theme', data.theme || 'dark');
