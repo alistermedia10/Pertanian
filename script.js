@@ -65,6 +65,7 @@ let data = JSON.parse(localStorage.getItem('agriMasterPro_v6_topnav')) || {
     harvests: [],
     expenses: 0,
     theme: 'dark'
+				blogUrl:'https://alister10.blogspot.com'
 };
 
 let currentFieldId = null;
