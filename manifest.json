@@ -1,6 +1,6 @@
 {
-  "name": "AgriAlister Pro",
-  "short_name": "AgriAlister",
+  "name": "Agri Alister Pro",
+  "short_name": "Agri Alister",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f0f2f5",
