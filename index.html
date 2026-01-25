@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AgriAlister Pro v6.0</title>
+    <title>AgriMaster Pro</title>
     
-    <!-- Link ke File CSS -->
+    <!-- Link ke CSS -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Link ke Manifest (untuk install di HP) -->
     <link rel="manifest" href="manifest.json">
     
-    <!-- Meta untuk PWA (Tema warna status bar HP) -->
+    <!-- Meta PWA -->
     <meta name="theme-color" content="#2e7d32">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,23 +18,18 @@
 
 <div id="app-container">
 
-    <!-- HEADER DENGAN MENU ATAS -->
+    <!-- HEADER & NAVIGASI -->
     <div class="topbar">
         <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="font-size:1.4rem;">Agri Alister Pro</h2>
+            <h2 style="font-size:1.4rem;">AgriMaster Pro</h2>
             <div class="user-wallet">💰 <span id="wallet-balance">0</span></div>
         </div>
         
-        <!-- MENU NAVIGASI DI ATAS -->
         <div class="top-nav">
             <button class="nav-item active" onclick="nav.to('dashboard')" id="nav-dashboard">
                 <span class="nav-icon">🏠</span>
                 <span class="nav-label">Home</span>
             </button>
-<button class="nav-item" onclick="nav.to('blog')" id="nav-blog">
-    <span class="nav-icon">📰</span>
-    <span class="nav-label">Blog</span>
-</button>
             <button class="nav-item" onclick="nav.to('lahan')" id="nav-lahan">
                 <span class="nav-icon">🌱</span>
                 <span class="nav-label">Lahan</span>
@@ -49,6 +42,10 @@
                 <span class="nav-icon">⚒️</span>
                 <span class="nav-label">Alat</span>
             </button>
+            <button class="nav-item" onclick="nav.to('blog')" id="nav-blog">
+                <span class="nav-icon">📰</span>
+                <span class="nav-label">Blog</span>
+            </button>
             <button class="nav-item" onclick="nav.to('pengaturan')" id="nav-pengaturan">
                 <span class="nav-icon">⚙️</span>
                 <span class="nav-label">Menu</span>
@@ -56,9 +53,8 @@
         </div>
     </div>
 
-    <!-- DASHBOARD VIEW -->
+    <!-- VIEW DASHBOARD -->
     <div id="view-dashboard" class="view-section active">
-        <!-- Weather Widget -->
         <div class="weather-card">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
@@ -68,8 +64,6 @@
                 <div style="font-size: 3rem;">☀️</div>
             </div>
         </div>
-
-        <!-- Quick Stats -->
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-val" id="dash-fields">0</div>
@@ -84,21 +78,17 @@
                 <div class="stat-lbl">Total Panen</div>
             </div>
         </div>
-
-        <!-- Active Fields -->
         <div class="card">
             <div class="card-title">🌱 Lahan Aktif</div>
             <div id="dashboard-fields"></div>
         </div>
-
-        <!-- Recent Activities -->
         <div class="card">
             <div class="card-title">📝 Aktivitas Terakhir</div>
             <div id="activity-feed"></div>
         </div>
     </div>
 
-    <!-- LAHAN VIEW -->
+    <!-- VIEW LAHAN -->
     <div id="view-lahan" class="view-section">
         <div class="card">
             <button class="btn btn-primary" onclick="modal.open('modal-field')">➕ Tambah Lahan Baru</button>
@@ -106,14 +96,14 @@
         <div id="fields-list"></div>
     </div>
 
-    <!-- KATALOG VIEW -->
+    <!-- VIEW KATALOG -->
     <div id="view-katalog" class="view-section">
         <input type="text" id="search-catalog" class="form-input" placeholder="🔍 Cari tanaman..." style="margin-bottom:15px;" onkeyup="catalog.render()">
         <div id="catalog-list"></div>
         <div class="fab" onclick="modal.open('modal-plant')">+</div>
     </div>
 
-    <!-- ALAT VIEW -->
+    <!-- VIEW ALAT -->
     <div id="view-alat" class="view-section">
         <div class="tool-selector">
             <div class="tool-chip active" onclick="tools.setTab(0)">Benih</div>
@@ -121,8 +111,6 @@
             <div class="tool-chip" onclick="tools.setTab(2)">Obat HPT</div>
             <div class="tool-chip" onclick="tools.setTab(3)">NPK Calculator</div>
         </div>
-        
-        <!-- Benih Calculator -->
         <div id="tool-0" class="card">
             <h3>Kalkulator Kebutuhan Benih</h3>
             <div class="input-group">
@@ -136,8 +124,6 @@
             <button class="btn btn-primary" onclick="tools.calcBenih()">Hitung Kebutuhan</button>
             <div id="res-benih" class="calc-result"></div>
         </div>
-
-        <!-- Pupuk Calculator -->
         <div id="tool-1" class="card" style="display:none;">
             <h3>Kalkulator Kebutuhan Pupuk</h3>
             <div class="input-group">
@@ -151,10 +137,8 @@
             <button class="btn btn-primary" onclick="tools.calcPupuk()">Hitung Kebutuhan</button>
             <div id="res-pupuk" class="calc-result"></div>
         </div>
-
-        <!-- HPT Calculator -->
         <div id="tool-2" class="card" style="display:none;">
-            <h3>Kalkulator Obat Hama & Penyakit</h3>
+            <h3>Kalkulator Obat Hama</h3>
             <div class="input-group">
                 <label>Volume Tangki (Liter):</label>
                 <input type="number" id="ch-t" class="form-input" placeholder="Contoh: 15">
@@ -166,10 +150,8 @@
             <button class="btn btn-primary" onclick="tools.calcHPT()">Hitung Campuran</button>
             <div id="res-hpt" class="calc-result"></div>
         </div>
-
-        <!-- NPK Calculator -->
         <div id="tool-3" class="card" style="display:none;">
-            <h3>Kalkulator Kebutuhan NPK</h3>
+            <h3>Kalkulator NPK</h3>
             <div class="input-group">
                 <label>Pilih Tanaman:</label>
                 <select id="cn-t" class="form-input"></select>
@@ -183,21 +165,50 @@
         </div>
     </div>
 
-    <!-- PENGATURAN VIEW -->
-<div class="list-row" onclick="alert('Masukkan alamat RSS Feed blog kamu. Contoh: https://blogkamu.com/feed atau https://blogkamu.blogspot.com/feeds/posts/default')">
-    <div class="icon-box" style="background:rgba(41, 128, 185, 0.1);">🌐</div>
-    <div class="text-box">
-        <div class="title">URL Feed Blog</div>
-        <div class="sub">Sumber artikel berita</div>
+    <!-- VIEW BLOG -->
+    <div id="view-blog" class="view-section">
+        <div class="card">
+            <div class="card-title">
+                <span>📰 Artikel Pertanian</span>
+                <span class="badge" style="background:#eee;">Live Update</span>
+            </div>
+            <div id="blog-status" style="font-size:0.8rem; color:#888; margin-bottom:10px; display:none;">
+                <span id="blog-loader">🔄 Memuat data...</span>
+                <span id="blog-error" style="color:red;">❌ Gagal memuat artikel.</span>
+            </div>
+            <div id="blog-list"></div>
+        </div>
     </div>
-</div>
-<div style="padding: 0 10px 10px 10px;">
-    <input type="text" id="setting-blog-url" class="form-input" placeholder="https://blogkamu.blogspot.com/feeds/posts/default">
-</div>
+
+    <!-- VIEW PENGATURAN -->
     <div id="view-pengaturan" class="view-section">
         <div class="card">
             <div class="card-title">⚙️ Pengaturan Aplikasi</div>
             
+            <!-- BLOG SETTINGS -->
+            <div class="list-row" onclick="alert('Masukkan URL RSS Feed (contoh: https://blogkamu.blogspot.com/feeds/posts/default/-/Pertanian). Tekan ENTER setelah ketik.')">
+                <div class="icon-box" style="background:rgba(41, 128, 185, 0.1);">🌐</div>
+                <div class="text-box">
+                    <div class="title">URL Feed Blog</div>
+                    <div class="sub">Sumber artikel berita</div>
+                </div>
+            </div>
+            <div style="padding: 0 10px 10px 10px;">
+                <input type="text" id="setting-blog-url" class="form-input" placeholder="https://blogkamu.blogspot.com/feeds/posts/default">
+            </div>
+
+            <div class="list-row" onclick="alert('Pisahkan kata kunci dengan koma. Artikel yang judulnya TIDAK mengandung kata kunci ini akan disembunyikan.')">
+                <div class="icon-box" style="background:rgba(155, 89, 182, 0.1);">🔍</div>
+                <div class="text-box">
+                    <div class="title">Filter Kata Kunci</div>
+                    <div class="sub">Hanya tampilkan artikel yang relevan</div>
+                </div>
+            </div>
+            <div style="padding: 0 10px 15px 10px;">
+                <textarea id="setting-blog-keywords" class="form-input" rows="3" placeholder="pertanian, tani, sawah, panen, sayur"></textarea>
+            </div>
+
+            <!-- GENERAL SETTINGS -->
             <div class="list-row">
                 <div class="icon-box">🌙</div>
                 <div class="text-box">
@@ -238,84 +249,42 @@
     </div>
 
 </div>
-<!-- BLOG VIEW -->
-<div id="view-blog" class="view-section">
-    <div class="card">
-        <div class="card-title">
-            <span>📰 Artikel Pertanian</span>
-            <span class="badge" style="background:#eee;">Live Update</span>
-        </div>
-        <div id="blog-status" style="font-size:0.8rem; color:#888; margin-bottom:10px; display:none;">
-            <span id="blog-loader">🔄 Memuat data...</span>
-            <span id="blog-error" style="color:red;">❌ Gagal memuat artikel. Cek koneksi.</span>
-        </div>
-        <div id="blog-list"></div>
-    </div>
-</div>
 
-<!-- MODAL: ADD FIELD -->
+<!-- MODALS -->
 <div id="modal-field" class="modal">
     <div class="modal-box">
         <h3>📝 Tambah Lahan Baru</h3>
-        <div class="input-group">
-            <label>Nama Lahan / Blok</label>
-            <input type="text" id="f-name" class="form-input" placeholder="Blok A Utama">
-        </div>
-        <div class="input-group">
-            <label>Pilih Tanaman</label>
-            <select id="f-plant" class="form-input"></select>
-        </div>
-        <div class="input-group">
-            <label>Tanggal Tanam</label>
-            <input type="date" id="f-date" class="form-input">
-        </div>
-        <div class="input-group">
-            <label>Luas (m²)</label>
-            <input type="number" id="f-area" class="form-input" placeholder="1000">
-        </div>
-        <div class="input-group">
-            <label>Jenis Biaya</label>
-            <select id="f-type" class="form-input">
-                <option value="seed">Bibit & Tanam</option>
-                <option value="fert">Pupuk & Obat</option>
-                <option value="labor">Gaji Tenaga</option>
-                <option value="other">Lain-lain</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>Biaya Awal (Rp)</label>
-            <input type="number" id="f-cost" class="form-input" placeholder="500000">
-        </div>
+        <div class="input-group"><label>Nama Lahan</label><input type="text" id="f-name" class="form-input" placeholder="Blok A Utama"></div>
+        <div class="input-group"><label>Pilih Tanaman</label><select id="f-plant" class="form-input"></select></div>
+        <div class="input-group"><label>Tanggal Tanam</label><input type="date" id="f-date" class="form-input"></div>
+        <div class="input-group"><label>Luas (m²)</label><input type="number" id="f-area" class="form-input" placeholder="1000"></div>
+        <div class="input-group"><label>Jenis Biaya</label><select id="f-type" class="form-input"><option value="seed">Bibit & Tanam</option><option value="fert">Pupuk & Obat</option><option value="labor">Gaji Tenaga</option><option value="other">Lain-lain</option></select></div>
+        <div class="input-group"><label>Biaya Awal (Rp)</label><input type="number" id="f-cost" class="form-input" placeholder="500000"></div>
         <button class="btn btn-primary" onclick="app.addField()">Simpan Lahan</button>
         <button class="btn btn-outline" style="margin-top:10px;" onclick="modal.close()">Batal</button>
     </div>
 </div>
 
-<!-- MODAL: FIELD DETAILS -->
 <div id="modal-detail" class="modal">
     <div class="modal-box">
         <div id="detail-header"></div>
-        
         <div style="margin: 15px 0; padding:10px; background:var(--glass); border-radius:10px;">
             <h4 style="margin-bottom:10px;">📅 Jadwal Tanam</h4>
             <div id="d-timeline" class="timeline"></div>
         </div>
-
         <div style="margin: 15px 0; padding:10px; background:var(--glass); border-radius:10px;">
             <h4 style="margin-bottom:10px;">📋 Daftar Tugas</h4>
             <div id="task-list"></div>
             <div style="display:flex; gap:5px; margin-top:10px;">
-                <input type="text" id="new-task-input" class="form-input" placeholder="Tambah tugas baru..." style="font-size:0.8rem; padding:8px;">
+                <input type="text" id="new-task-input" class="form-input" placeholder="Tambah tugas..." style="font-size:0.8rem; padding:8px;">
                 <button class="btn btn-primary" style="width:auto; padding:8px 12px;" onclick="app.addTask()">➕</button>
             </div>
         </div>
-
         <button class="btn btn-primary" onclick="app.initHarvest()">🌽 Lakukan Panen</button>
         <button class="btn btn-outline" style="margin-top:10px;" onclick="modal.close()">Tutup</button>
     </div>
 </div>
 
-<!-- MODAL: PLANT INFO -->
 <div id="modal-plant-info" class="modal">
     <div class="modal-box">
         <h3 id="pi-name">Nama Tanaman</h3>
@@ -325,141 +294,30 @@
     </div>
 </div>
 
-<!-- MODAL: ADD PLANT -->
 <div id="modal-plant" class="modal">
     <div class="modal-box">
         <h3>🌱 Tambah Tanaman Baru</h3>
-        <div class="input-group">
-            <label>Nama Tanaman</label>
-            <input type="text" id="p-name" class="form-input" placeholder="Contoh: Padi Ciherang">
-        </div>
-        <div class="input-group">
-            <label>Harga Jual Estimasi (per Kg)</label>
-            <input type="number" id="p-price" class="form-input" placeholder="10000">
-        </div>
-        <div class="input-group">
-            <label>Hari Panen (HST)</label>
-            <input type="number" id="p-days" class="form-input" placeholder="90">
-        </div>
-        <div class="input-group">
-            <label>Kebutuhan Benih per m²</label>
-            <input type="number" id="p-seeds" class="form-input" placeholder="0.2" step="0.01">
-        </div>
-        <div class="input-group">
-            <label>Kategori</label>
-            <select id="p-cat" class="form-input">
-                <option value="Pangan">Pangan</option>
-                <option value="Sayur">Sayur</option>
-                <option value="Buah">Buah</option>
-                <option value="Pohon">Pohon</option>
-            </select>
-        </div>
+        <div class="input-group"><label>Nama Tanaman</label><input type="text" id="p-name" class="form-input" placeholder="Contoh: Padi Ciherang"></div>
+        <div class="input-group"><label>Harga Jual (per Kg)</label><input type="number" id="p-price" class="form-input" placeholder="10000"></div>
+        <div class="input-group"><label>Hari Panen (HST)</label><input type="number" id="p-days" class="form-input" placeholder="90"></div>
+        <div class="input-group"><label>Kebutuhan Benih per m²</label><input type="number" id="p-seeds" class="form-input" placeholder="0.2" step="0.01"></div>
+        <div class="input-group"><label>Kategori</label><select id="p-cat" class="form-input"><option value="Pangan">Pangan</option><option value="Sayur">Sayur</option><option value="Buah">Buah</option><option value="Pohon">Pohon</option></select></div>
         <button class="btn btn-primary" onclick="app.addPlant()">Simpan Tanaman</button>
         <button class="btn btn-outline" style="margin-top:10px;" onclick="modal.close()">Batal</button>
     </div>
 </div>
 
-<footer class="footer-compact-horizontal">
-  <div class="footer-wrapper">
-    <div class="footer-top">
-      <p class="brand-name">Agri Alister Pro</p>
-      <div class="horizontal-menu">
-        <a href="https://alister10.blogspot.com">Blog</a>
-        <a href="#">Fitur</a>
-        <a href="#">Bantuan</a>
-        <a href="#">Privasi</a>
-      </div>
-    </div>
-    
-    <div class="footer-bottom-horizontal">
-      <p>© <span id="copyright-year"></span> Agri Alister Pro</p>
-      <p class="version-badge">v1.0.0</p>
-    </div>
-  </div>
-</footer>
-
-<style>
-  .footer-compact-horizontal {
-    background-color: #1f3d2b;
-    color: #ffffff;
-    padding: 25px 20px;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
-  
-  .footer-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  
-  .footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #2e4d3a;
-  }
-  
-  .brand-name {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #ffffff;
-  }
-  
-  .horizontal-menu {
-    display: flex;
-    gap: 25px;
-  }
-  
-  .horizontal-menu a {
-    color: #8fd19e;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.2s ease;
-  }
-  
-  .horizontal-menu a:hover {
-    color: #ffffff;
-  }
-  
-  .footer-bottom-horizontal {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-  
-  .footer-bottom-horizontal p {
-    color: #a3c9ad;
-    font-size: 0.85rem;
-  }
-  
-  .version-badge {
-    background-color: rgba(143, 209, 158, 0.15);
-    color: #8fd19e;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.8rem;
-  }
-  
-  @media (max-width: 640px) {
-    .footer-top {
-      flex-direction: column;
-      text-align: center;
-    }
-    
-    .footer-bottom-horizontal {
-      flex-direction: column;
-      text-align: center;
-    }
-  }
-</style>
-
+<script src="script.js"></script>
 <script>
-  document.getElementById('copyright-year').textContent = new Date().getFullYear();
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js').then(function(registration) {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            }, function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+    }
 </script>
 </body>
 </html>
