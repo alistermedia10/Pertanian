@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompres Foto V1 (Simple)</title>
+    <style>
+        /* CSS Sederhana langsung di sini */
+        body {
+            font-family: sans-serif;
+            background-color: #121212;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .btn {
+            background: #00e676;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #aaa;
+        }
+
+        .preview-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
+        .img-box {
+            background: #000;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .img-box h3 {
+            margin: 0 0 10px;
+            font-size: 14px;
+            color: #00e676;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 300px;
+            border: 2px solid #333;
+        }
+
+        .info {
+            margin-top: 5px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Sembunyikan gambar jika belum ada */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Kompres Foto Sederhana</h2>
+        <p style="color:#888; font-size:14px;">Pilih 1 foto untuk dicoba dulu</p>
+
+        <input type="file" id="inputImage" accept="image/*">
+
+        <div class="control-group">
+            <label>Kualitas (0.1 - 1.0): <span id="qualityVal">0.7</span></label>
+            <input type="range" id="quality" min="0.1" max="1" step="0.1" value="0.7" style="width:100%">
+        </div>
+
+        <div class="control-group">
+            <label>Max Lebar (px): <span id="widthVal">1920</span></label>
+            <input type="range" id="maxWidth" min="300" max="2000" step="50" value="1920" style="width:100%">
+        </div>
+
+        <button id="compressBtn" class="btn" disabled>Kompres Sekarang</button>
+
+        <div class="preview-area">
+            <!-- Gambar Asli -->
+            <div class="img-box" id="boxOriginal">
+                <h3>ORIGINAL</h3>
+                <img id="imgOriginal" src="" alt="">
+                <div class="info" id="infoOriginal">Belum ada gambar</div>
+            </div>
+
+            <!-- Gambar Hasil -->
+            <div class="img-box hidden" id="boxResult">
+                <h3>HASIL KOMPRESI</h3>
+                <img id="imgResult" src="" alt="">
+                <div class="info" id="infoResult">-</div>
+                <a id="downloadLink" class="btn" style="display:block; text-decoration:none; margin-top:10px;">Download Hasil</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Referensi Elemen
+        const inputImage = document.getElementById('inputImage');
+        const imgOriginal = document.getElementById('imgOriginal');
+        const imgResult = document.getElementById('imgResult');
+        const boxOriginal = document.getElementById('boxOriginal');
+        const boxResult = document.getElementById('boxResult');
+        const compressBtn = document.getElementById('compressBtn');
+        const qualityInput = document.getElementById('quality');
+        const widthInput = document.getElementById('maxWidth');
+        const infoOriginal = document.getElementById('infoOriginal');
+        const infoResult = document.getElementById('infoResult');
+        const downloadLink = document.getElementById('downloadLink');
+
+        let currentFile = null;
+
+        // Update angka saat slider digeser
+        qualityInput.oninput = function() { document.getElementById('qualityVal').innerText = this.value; };
+        widthInput.oninput = function() { document.getElementById('widthVal').innerText = this.value; };
+
+        // Saat file dipilih
+        inputImage.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            currentFile = file;
+            
+            // Tampilkan info ukuran asli
+            infoOriginal.innerText = (file.size / 1024).toFixed(1) + " KB";
+
+            // Baca file gambar
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                imgOriginal.src = event.target.result;
+                boxOriginal.classList.remove('hidden');
+                boxResult.classList.add('hidden'); // Sembunyikan hasil lama
+                compressBtn.disabled = false;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Saat tombol kompres ditekan
+        compressBtn.addEventListener('click', function() {
+            if (!currentFile) return;
+
+            const quality = parseFloat(qualityInput.value);
+            const maxWidth = parseInt(widthInput.value);
+
+            // Buat gambar sementara
+            const img = new Image();
+            img.onload = function() {
+                // Hitung ukuran baru
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    const ratio = maxWidth / width;
+                    width = maxWidth;
+                    height = height * ratio;
+                }
+
+                // Buat Canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Konversi ke JPEG dengan kualitas
+                const dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+                // Tampilkan hasil
+                imgResult.src = dataUrl;
+                boxResult.classList.remove('hidden');
+                
+                // Hitung ukuran hasil (perkiraan)
+                const head = 'data:image/jpeg;base64,';
+                const sizeInBytes = Math.round((dataUrl.length - head.length) * 3 / 4);
+                infoResult.innerText = (sizeInBytes / 1024).toFixed(1) + " KB";
+
+                // Atur link download
+                downloadLink.href = dataUrl;
+                downloadLink.download = 'hasil_kompres.jpg';
+            };
+
+            img.src = imgOriginal.src;
+        });
+    </script>
+</body>
+</html>
