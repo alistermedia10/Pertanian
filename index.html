@@ -184,6 +184,16 @@
     </div>
 
     <!-- PENGATURAN VIEW -->
+<div class="list-row" onclick="alert('Masukkan alamat RSS Feed blog kamu. Contoh: https://blogkamu.com/feed atau https://blogkamu.blogspot.com/feeds/posts/default')">
+    <div class="icon-box" style="background:rgba(41, 128, 185, 0.1);">🌐</div>
+    <div class="text-box">
+        <div class="title">URL Feed Blog</div>
+        <div class="sub">Sumber artikel berita</div>
+    </div>
+</div>
+<div style="padding: 0 10px 10px 10px;">
+    <input type="text" id="setting-blog-url" class="form-input" placeholder="https://blogkamu.blogspot.com/feeds/posts/default">
+</div>
     <div id="view-pengaturan" class="view-section">
         <div class="card">
             <div class="card-title">⚙️ Pengaturan Aplikasi</div>
@@ -227,6 +237,20 @@
         </div>
     </div>
 
+</div>
+<!-- BLOG VIEW -->
+<div id="view-blog" class="view-section">
+    <div class="card">
+        <div class="card-title">
+            <span>📰 Artikel Pertanian</span>
+            <span class="badge" style="background:#eee;">Live Update</span>
+        </div>
+        <div id="blog-status" style="font-size:0.8rem; color:#888; margin-bottom:10px; display:none;">
+            <span id="blog-loader">🔄 Memuat data...</span>
+            <span id="blog-error" style="color:red;">❌ Gagal memuat artikel. Cek koneksi.</span>
+        </div>
+        <div id="blog-list"></div>
+    </div>
 </div>
 
 <!-- MODAL: ADD FIELD -->
