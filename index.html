@@ -331,107 +331,107 @@
     </div>
 </div>
 
-<footer class="footer-grid-center">
-  <div class="footer-grid">
-    <div class="footer-item brand">
-      <h3>Agri Alister Pro</h3>
-      <p>Manajemen Pertanian & Agribisnis</p>
+<footer class="footer-compact-horizontal">
+  <div class="footer-wrapper">
+    <div class="footer-top">
+      <p class="brand-name">Agri Alister Pro</p>
+      <div class="horizontal-menu">
+        <a href="https://blog.agrialisterpro.com">Blog</a>
+        <a href="#">Fitur</a>
+        <a href="#">Bantuan</a>
+        <a href="#">Privasi</a>
+      </div>
     </div>
     
-    <div class="footer-item links">
-      <a href="#">Blog</a>
-      <a href="#">Fitur</a>
-      <a href="#">Bantuan</a>
-      <a href="#">Privasi</a>
-    </div>
-    
-    <div class="footer-item legal">
-      <p>© <span id="copyrightYear"></span> Agri Alister Pro</p>
-      <p class="app-version">v1.0.0</p>
+    <div class="footer-bottom-horizontal">
+      <p>© <span id="copyright-year"></span> Agri Alister Pro</p>
+      <p class="version-badge">v1.0.0</p>
     </div>
   </div>
 </footer>
 
 <style>
-  .footer-grid-center {
+  .footer-compact-horizontal {
     background-color: #1f3d2b;
     color: #ffffff;
-    padding: 35px 20px;
+    padding: 25px 20px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
   
-  .footer-grid {
-    max-width: 800px;
+  .footer-wrapper {
+    max-width: 900px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    text-align: center;
-    align-items: start;
   }
   
-  .footer-item {
+  .footer-top {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #2e4d3a;
   }
   
-  .brand h3 {
-    font-size: 1.5rem;
+  .brand-name {
+    font-size: 1.3rem;
     font-weight: 600;
-    margin-bottom: 8px;
     color: #ffffff;
   }
   
-  .brand p {
-    color: #a3c9ad;
-    font-size: 0.9rem;
-    line-height: 1.4;
-  }
-  
-  .links {
+  .horizontal-menu {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    gap: 25px;
   }
   
-  .links a {
+  .horizontal-menu a {
     color: #8fd19e;
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.2s ease;
   }
   
-  .links a:hover {
+  .horizontal-menu a:hover {
     color: #ffffff;
   }
   
-  .legal p {
+  .footer-bottom-horizontal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .footer-bottom-horizontal p {
     color: #a3c9ad;
     font-size: 0.85rem;
-    margin-bottom: 5px;
   }
   
-  .app-version {
-    color: #7cc48b;
+  .version-badge {
+    background-color: rgba(143, 209, 158, 0.15);
+    color: #8fd19e;
+    padding: 4px 10px;
+    border-radius: 12px;
     font-size: 0.8rem;
-    opacity: 0.9;
   }
   
-  /* Responsive */
-  @media (max-width: 700px) {
-    .footer-grid {
-      grid-template-columns: 1fr;
-      gap: 25px;
+  @media (max-width: 640px) {
+    .footer-top {
+      flex-direction: column;
+      text-align: center;
     }
     
-    .footer-item {
-      align-items: center;
+    .footer-bottom-horizontal {
+      flex-direction: column;
+      text-align: center;
     }
   }
 </style>
 
 <script>
-  document.getElementById('copyrightYear').textContent = new Date().getFullYear();
+  document.getElementById('copyright-year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
