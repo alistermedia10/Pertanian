@@ -1,4 +1,4 @@
-const CACHE_NAME = 'agri-master-v3';
+const CACHE_NAME = 'alister-agri-v1';
 const ASSETS = [
     './',
     './index.html',
