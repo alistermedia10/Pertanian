@@ -306,6 +306,118 @@
         <button class="btn btn-outline" style="margin-top:10px;" onclick="modal.close()">Batal</button>
     </div>
 </div>
+<footer class="footer-horizontal">
+  <div class="footer-content">
+    
+    <span class="footer-brand">Alister Media</span>
+
+    <!-- Navigasi Horizontal -->
+    <nav class="footer-nav">
+      <a href="#">Home</a>
+      <a href="#">Blog</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
+
+    <span class="footer-copy">
+      © 2026 All Rights Reserved. Design by Alister Media.
+    </span>
+
+  </div>
+</footer>
+
+<style>
+  /* --- Reset dasar (opsional, kalau belum ada) --- */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* --- Footer container --- */
+  .footer-horizontal {
+    background-color: #1a3c34; /* hijau gelap tema pertanian */
+    color: #e0f2f1;
+    padding: 2rem 0;
+    margin-top: auto;
+    width: 100%;
+    border-top: 4px solid #4caf50;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    flex-wrap: wrap;
+  }
+
+  .footer-brand {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #66bb6a;
+  }
+
+  /* --- Navigasi Horizontal --- */
+  .footer-nav {
+    display: flex;              /* flex = horizontal secara default */
+    flex-direction: row;         /* eksplisit: dari kiri ke kanan */
+    justify-content: center;     /* posisi link di tengah */
+    align-items: center;        /* vertikal rapi tengah */
+    gap: 2rem;                  /* jarak antar link Home / Blog / About / Contact */
+  }
+
+  .footer-nav a {
+    text-decoration: none;
+    color: #a5d6a7;             /* hijau pucat */
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+
+  .footer-nav a:hover {
+    color: #fdd835;             /* kuning panen saat hover */
+  }
+
+  .footer-copy {
+    font-size: 0.85rem;
+    color: #81c784;
+    border-left: 1px solid #3e6358;
+    padding-left: 1.5rem;
+  }
+
+  /* --- Mobile: biar tetap rapi kalau layar sempit --- */
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+    }
+
+    .footer-nav {
+      flex-direction: column;   /* tetap horizontal di desktop, vertikal di HP */
+      gap: 1rem;
+    }
+
+    .footer-copy {
+      border-left: none;
+      padding-left: 0;
+      border-top: 1px solid #3e6358;
+      padding-top: 1rem;
+      width: 100%;
+    }
+  }
+</style>
 
 <script src="script.js"></script>
 <script>
