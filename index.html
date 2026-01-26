@@ -16,42 +16,15 @@
 
 <div id="app-container">
 
-    <!-- HEADER & NAVIGASI -->
+    <!-- HEADER (Lebih Pendek & Bersih) -->
     <div class="topbar">
-        <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-            <!-- Logo dan Judul -->
-            <div style="display:flex; align-items:center; gap:10px;">
-                <img src="logoagri.png" alt="Logo" class="topbar-logo">
-                <h2 style="font-size:1.2rem; margin:0;">Alister Agri Pro</h2>
-            </div>
-            <div class="user-wallet">💰 <span id="wallet-balance">0</span>
-        </div>
-        
-        <div class="top-nav">
-            <button class="nav-item active" onclick="nav.to('dashboard')" id="nav-dashboard">
-                <span class="nav-icon">🏠</span>
-                <span class="nav-label">Home</span>
-            </button>
-            <button class="nav-item" onclick="nav.to('lahan')" id="nav-lahan">
-                <span class="nav-icon">🌱</span>
-                <span class="nav-label">Lahan</span>
-            </button>
-            <button class="nav-item" onclick="nav.to('katalog')" id="nav-katalog">
-                <span class="nav-icon">📖</span>
-                <span class="nav-label">Katalog</span>
-            </button>
-            <button class="nav-item" onclick="nav.to('alat')" id="nav-alat">
-                <span class="nav-icon">⚒️</span>
-                <span class="nav-label">Alat</span>
-            </button>
-            <button class="nav-item" onclick="nav.to('blog')" id="nav-blog">
-                <span class="nav-icon">📰</span>
-                <span class="nav-label">Blog</span>
-            </button>
-            <button class="nav-item" onclick="nav.to('pengaturan')" id="nav-pengaturan">
-                <span class="nav-icon">⚙️</span>
-                <span class="nav-label">Menu</span>
-            </button>
+        <div style="display:flex; align-items:center; gap:10px; width:100%;">
+            <!-- Logo & Judul -->
+            <img src="icon-192.png" alt="Logo" class="topbar-logo">
+            <h2 style="font-size:1.3rem; margin:0;">Alister Agri Pro</h2>
+            
+            <!-- Wallet -->
+            <div style="margin-left:auto;" class="user-wallet">💰 <span id="wallet-balance">0</span></div>
         </div>
     </div>
 
@@ -167,10 +140,9 @@
         </div>
     </div>
 
-    <!-- VIEW BLOG (UPDATED DESIGN) -->
+    <!-- VIEW BLOG -->
     <div id="view-blog" class="view-section">
         <div class="card">
-            <!-- Header Artikel -->
             <div class="blog-header">
                 <div class="blog-header-text">
                     <h3 class="blog-title">📰 Artikel Teknik Sipil</h3>
@@ -180,17 +152,11 @@
                     Kunjungi Blog Resmi <span>&rarr;</span>
                 </a>
             </div>
-
-            <!-- Loading -->
             <div id="blog-loading" class="blog-loading hidden">
                 <div class="spinner"></div>
                 <p>Memuat artikel terbaru...</p>
             </div>
-
-            <!-- Grid Artikel -->
             <div id="blog-container" class="blog-grid"></div>
-
-            <!-- Error -->
             <div id="blog-error" class="blog-error hidden">
                 <p>Gagal memuat artikel. Periksa koneksi internet Anda.</p>
             </div>
@@ -323,14 +289,49 @@
     </div>
 </div>
 
+<!-- FOOTER ALISTER MEDIA -->
 <footer class="footer-horizontal">
   <div class="footer-content">
     <span class="footer-brand">Alister Media</span>
+    <nav class="footer-nav">
+      <a href="#">Home</a>
+      <a href="#">Blog</a>
+      <a href="#">About</a>
+      <a href="#">Contact</a>
+    </nav>
     <span class="footer-copy">
       © 2026 All Rights Reserved. Design by Alister Media.
     </span>
   </div>
 </footer>
+
+<!-- BOTTOM NAVIGATION (BARU) -->
+<nav class="bottom-nav">
+    <button class="nav-item active" onclick="nav.to('dashboard')" id="nav-dashboard">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-item" onclick="nav.to('lahan')" id="nav-lahan">
+        <span class="nav-icon">🌱</span>
+        <span class="nav-label">Lahan</span>
+    </button>
+    <button class="nav-item" onclick="nav.to('katalog')" id="nav-katalog">
+        <span class="nav-icon">📖</span>
+        <span class="nav-label">Katalog</span>
+    </button>
+    <button class="nav-item" onclick="nav.to('alat')" id="nav-alat">
+        <span class="nav-icon">⚒️</span>
+        <span class="nav-label">Alat</span>
+    </button>
+    <button class="nav-item" onclick="nav.to('blog')" id="nav-blog">
+        <span class="nav-icon">📰</span>
+        <span class="nav-label">Blog</span>
+    </button>
+    <button class="nav-item" onclick="nav.to('pengaturan')" id="nav-pengaturan">
+        <span class="nav-icon">⚙️</span>
+        <span class="nav-label">Menu</span>
+    </button>
+</nav>
 
 <script src="script.js"></script>
 <script>
