@@ -7,14 +7,15 @@ const defaultCatalog = [
     { id: 6, name: "Wortel", cat: "Sayur", days: 90, price: 12000, icon: "🥕", desc: "Akar umbi sehat.", schedule: [{hst: 0, task: "Tabur"}, {hst: 30, task: "Pupuk"}, {hst: 90, task: "Cubit"}], seeds: 0.2, npk: {n: 150, p: 50, k: 100}, pupuk: {u: 0.08, tsp: 0.05, kcl: 0.08} }
 ];
 
-let data = JSON.parse(localStorage.getItem('agriMasterPro_v6_full')) || {
+let data = JSON.parse(localStorage.getItem('alisterAgriPro_v1')) || {
     wallet: 0, catalog: defaultCatalog, fields: [], harvests: [], expenses: 0, theme: 'dark',
-    blogUrl: '', blogKeywords: 'pertanian, tani, sawah, panen, sayur'
+    blogUrl: 'https://alister10.blogspot.com/feeds/posts/default', // Default URL
+    blogKeywords: 'teknik, sipil, pertanian, alister' 
 };
 
 let currentFieldId = null;
 
-function save() { localStorage.setItem('agriMasterPro_v6_full', JSON.stringify(data)); }
+function save() { localStorage.setItem('alisterAgriPro_v1', JSON.stringify(data)); }
 
 const nav = {
     to: (view) => {
@@ -35,28 +36,21 @@ const app = {
         document.documentElement.setAttribute('data-theme', data.theme || 'dark');
         tools.init(); app.refresh(); document.getElementById('f-date').valueAsDate = new Date();
         
-        // Fix Enter Key & Save Logic
+        // Input Blog URL
         const urlIn = document.getElementById('setting-blog-url');
         if(urlIn) {
             urlIn.value = data.blogUrl || '';
-            urlIn.onkeydown = (e)=>{ if(e.key==='Enter'){ data.blogUrl=urlIn.value; save(); urlIn.blur(); alert('✅ Tersimpan'); }};
+            urlIn.onkeydown = (e)=>{ if(e.key==='Enter'){ data.blogUrl=urlIn.value; save(); urlIn.blur(); }};
             urlIn.onchange = ()=>{ data.blogUrl=urlIn.value; save(); };
         }
         const keyIn = document.getElementById('setting-blog-keywords');
         if(keyIn) {
             keyIn.value = data.blogKeywords || '';
-            keyIn.onkeydown = (e)=>{ if(e.key==='Enter'){ data.blogKeywords=keyIn.value; save(); keyIn.blur(); alert('✅ Tersimpan'); }};
+            keyIn.onkeydown = (e)=>{ if(e.key==='Enter'){ data.blogKeywords=keyIn.value; save(); keyIn.blur(); }};
             keyIn.onchange = ()=>{ data.blogKeywords=keyIn.value; save(); };
         }
-
-        if(!localStorage.getItem('agri_master_v6_first_run')){
-            console.log("First Run"); localStorage.setItem('agri_master_v6_first_run', 'true');
-        }
     },
-    toggleTheme: () => {
-        data.theme = data.theme==='light'?'dark':'light';
-        document.documentElement.setAttribute('data-theme', data.theme); save();
-    },
+    toggleTheme: () => { data.theme = data.theme==='light'?'dark':'light'; document.documentElement.setAttribute('data-theme', data.theme); save(); },
     refresh: () => {
         app.renderDashboard(); app.renderFields(); catalog.render();
         document.getElementById('wallet-balance').innerText = data.wallet.toLocaleString('id-ID');
@@ -67,20 +61,16 @@ const app = {
         document.getElementById('dash-harvests').innerText = data.harvests.length;
         let total = 0; data.fields.forEach(f=>total+=(f.cost||0));
         document.getElementById('dash-expense').innerText = 'Rp '+total.toLocaleString('id-ID');
-        
         const df = document.getElementById('dashboard-fields'); df.innerHTML='';
         active.slice(0,3).forEach(f=>{
             const age = Math.ceil(Math.abs(new Date()-new Date(f.datePlanted))/86400000);
             const pct = Math.min(100, Math.round((age/f.days)*100));
             df.innerHTML += `<div class="list-row" onclick="app.openDetail(${f.id})"><div class="icon-box">${f.plantIcon}</div><div class="text-box"><div class="title">${f.name}</div><div class="sub">${f.plantName} • ${age} HST</div><div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div></div><span class="badge ${pct>=90?'warning':'active'}">${pct}%</span></div>`;
         });
-        
         const feed = document.getElementById('activity-feed'); feed.innerHTML='';
         [...data.harvests.map(h=>({...h,type:'harvest'})), ...active.map(f=>({type:'field',name:f.name,date:f.datePlanted}))]
         .sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5).forEach(act=>{
-            feed.innerHTML += act.type==='harvest' 
-            ? `<div class="list-row"><div class="icon-box" style="background:rgba(39,174,96,0.1);">💰</div><div class="text-box"><div class="title">Panen ${act.plant}</div><div class="sub">${act.date}</div></div><span style="font-size:0.8rem;font-weight:bold;color:var(--success);">+${act.income}</span></div>`
-            : `<div class="list-row"><div class="icon-box" style="background:rgba(46,125,50,0.1);">🌱</div><div class="text-box"><div class="title">Lahan ${act.name}</div><div class="sub">${act.date}</div></div></div>`;
+            feed.innerHTML += act.type==='harvest' ? `<div class="list-row"><div class="icon-box" style="background:rgba(39,174,96,0.1);">💰</div><div class="text-box"><div class="title">Panen ${act.plant}</div><div class="sub">${act.date}</div></div><span style="font-size:0.8rem;font-weight:bold;color:var(--success);">+${act.income}</span></div>` : `<div class="list-row"><div class="icon-box" style="background:rgba(46,125,50,0.1);">🌱</div><div class="text-box"><div class="title">Lahan ${act.name}</div><div class="sub">${act.date}</div></div></div>`;
         });
     },
     renderFields: () => {
@@ -160,27 +150,32 @@ const dataMgr = {
 
 const blog = {
     fetch: () => {
-        const u=data.blogUrl, k=data.blogKeywords||'', l=document.getElementById('blog-list'), lo=document.getElementById('blog-loader'), er=document.getElementById('blog-error');
-        l.innerHTML=''; const arr=k.toLowerCase().split(',').map(x=>x.trim()).filter(x=>x);
-        if(!u){ l.innerHTML=`<div style="text-align:center;padding:20px;">Belum set URL</div>`; return; }
-        document.getElementById('blog-status').style.display='block'; lo.style.display='inline'; er.style.display='none';
-        fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}`).then(r=>r.json()).then(res=>{
-            lo.style.display='none';
+        const u=data.blogUrl, k=data.blogKeywords||'', l=document.getElementById('blog-container'), lo=document.getElementById('blog-loading'), er=document.getElementById('blog-error');
+        l.innerHTML=''; lo.classList.remove('hidden'); er.classList.add('hidden');
+        const arr=k.toLowerCase().split(',').map(x=>x.trim()).filter(x=>x);
+        if(!u){ l.innerHTML=`<p style="text-align:center;">URL belum diatur.</p>`; lo.classList.add('hidden'); return; }
+        
+        fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}`).then(res=>res.json()).then(res=>{
+            lo.classList.add('hidden');
             if(res.status==='ok'){
                 let c=0;
                 res.items.forEach(item=>{
                     const txt=item.title.toLowerCase()+" "+(item.categories||[]).join(" ").toLowerCase();
                     const match=arr.length===0||arr.some(k=>txt.includes(k));
-                    if(match && c<5){
-                        let img='https://picsum.photos/100/100'; if(item.thumbnail)img=item.thumbnail; else if(item.enclosure)img=item.enclosure.link;
+                    if(match && c<6){
+                        let img='https://picsum.photos/seed/alister/300/200'; 
+                        if(item.thumbnail)img=item.thumbnail;
+                        else if(item.enclosure)img=item.enclosure.link;
+                        
                         const d=new Date(item.pubDate).toLocaleDateString('id-ID',{day:'numeric',month:'short'});
-                        l.innerHTML+=`<a href="${item.link}" target="_blank" class="blog-card"><img src="${img}" class="blog-thumb" onerror="this.src='https://picsum.photos/100/100'"><div class="blog-info"><div class="blog-title">${item.title}</div><div class="blog-desc">${item.description.replace(/<[^>]*>?/gm,'').substring(0,50)}...</div><div class="blog-meta"><span>📅 ${d}</span><span>👁️ Baca</span></div></div></a>`;
+                        // GRID LAYOUT CARD
+                        l.innerHTML+=`<a href="${item.link}" target="_blank" class="blog-item"><img src="${img}" class="blog-item-img" onerror="this.src='https://picsum.photos/seed/alister/300/200'"><div class="blog-item-content"><div class="blog-item-title">${item.title}</div><div class="blog-item-desc">${item.description.replace(/<[^>]*>?/gm,'').substring(0,80)}...</div><div class="blog-item-meta">📅 ${d} &nbsp; &nbsp; 👁️ Baca</div></div></a>`;
                         c++;
                     }
                 });
                 if(c===0) l.innerHTML='<p style="text-align:center;">Tidak ada artikel cocok.</p>';
             }
-        }).catch(e=>{ lo.style.display='none'; er.style.display='inline'; });
+        }).catch(e=>{ lo.classList.add('hidden'); er.classList.remove('hidden'); });
     }
 };
 
