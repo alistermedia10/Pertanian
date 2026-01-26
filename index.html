@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Alister Agri Pro</title>
     
-    <!-- Link ke CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
     
-    <!-- Meta PWA -->
     <meta name="theme-color" content="#2e7d32">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,17 +15,16 @@
 <body>
 
 <div id="app-container">
-<div class="flex items-center gap-3">
-                <!-- Logo Image Placeholder (Pastikan file icon-192.png ada) -->
-                <!-- Jika menggunakan gambar: <img src="icon-192.png" ... -->
-<img src="icon-192.png" alt="Logo CivilPro" class="h-10 w-10 rounded-lg object-contain">
-
 
     <!-- HEADER & NAVIGASI -->
     <div class="topbar">
         <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="font-size:1.4rem;"> Alister Agri Pro</h2>
-            <div class="user-wallet">💰 <span id="wallet-balance">0</span></div>
+            <!-- Logo dan Judul -->
+            <div style="display:flex; align-items:center; gap:10px;">
+                <img src="icon-192.png" alt="Logo" class="topbar-logo">
+                <h2 style="font-size:1.2rem; margin:0;">Alister Agri Pro</h2>
+            </div>
+            <div class="user-wallet">💰 <span id="wallet-balance">0</span>
         </div>
         
         <div class="top-nav">
@@ -170,18 +167,33 @@
         </div>
     </div>
 
-    <!-- VIEW BLOG -->
+    <!-- VIEW BLOG (UPDATED DESIGN) -->
     <div id="view-blog" class="view-section">
         <div class="card">
-            <div class="card-title">
-                <span>📰 Artikel Pertanian</span>
-                <span class="badge" style="background:#eee;">Live Update</span>
+            <!-- Header Artikel -->
+            <div class="blog-header">
+                <div class="blog-header-text">
+                    <h3 class="blog-title">📰 Artikel Teknik Sipil</h3>
+                    <p class="blog-subtitle">Wawasan terbaru dari Alister Engineering</p>
+                </div>
+                <a href="https://alister10.blogspot.com" target="_blank" class="btn btn-visit">
+                    Kunjungi Blog Resmi <span>&rarr;</span>
+                </a>
             </div>
-            <div id="blog-status" style="font-size:0.8rem; color:#888; margin-bottom:10px; display:none;">
-                <span id="blog-loader">🔄 Memuat data...</span>
-                <span id="blog-error" style="color:red;">❌ Gagal memuat artikel.</span>
+
+            <!-- Loading -->
+            <div id="blog-loading" class="blog-loading hidden">
+                <div class="spinner"></div>
+                <p>Memuat artikel terbaru...</p>
             </div>
-            <div id="blog-list"></div>
+
+            <!-- Grid Artikel -->
+            <div id="blog-container" class="blog-grid"></div>
+
+            <!-- Error -->
+            <div id="blog-error" class="blog-error hidden">
+                <p>Gagal memuat artikel. Periksa koneksi internet Anda.</p>
+            </div>
         </div>
     </div>
 
@@ -190,8 +202,8 @@
         <div class="card">
             <div class="card-title">⚙️ Pengaturan Aplikasi</div>
             
-            <!-- BLOG SETTINGS -->
-            <div class="list-row" onclick="alert(' https://alister10.blogspot.com/feeds/posts/default?alt=rss. Tekan ENTER setelah ketik.')">
+            <!-- URL Blog -->
+            <div class="list-row">
                 <div class="icon-box" style="background:rgba(41, 128, 185, 0.1);">🌐</div>
                 <div class="text-box">
                     <div class="title">URL Feed Blog</div>
@@ -202,7 +214,7 @@
                 <input type="text" id="setting-blog-url" class="form-input" placeholder="https://alister10.blogspot.com/feeds/posts/default">
             </div>
 
-            <div class="list-row" onclick="alert('Pisahkan kata kunci dengan koma. Artikel yang judulnya TIDAK mengandung kata kunci ini akan disembunyikan.')">
+            <div class="list-row">
                 <div class="icon-box" style="background:rgba(155, 89, 182, 0.1);">🔍</div>
                 <div class="text-box">
                     <div class="title">Filter Kata Kunci</div>
@@ -210,10 +222,9 @@
                 </div>
             </div>
             <div style="padding: 0 10px 15px 10px;">
-                <textarea id="setting-blog-keywords" class="form-input" rows="3" placeholder="pertanian, tani, sawah, panen, sayur"></textarea>
+                <textarea id="setting-blog-keywords" class="form-input" rows="3" placeholder="teknik, sipil, proyek, jembatan"></textarea>
             </div>
 
-            <!-- GENERAL SETTINGS -->
             <div class="list-row">
                 <div class="icon-box">🌙</div>
                 <div class="text-box">
@@ -311,127 +322,30 @@
         <button class="btn btn-outline" style="margin-top:10px;" onclick="modal.close()">Batal</button>
     </div>
 </div>
+
 <footer class="footer-horizontal">
   <div class="footer-content">
-    
     <span class="footer-brand">Alister Media</span>
-
-    <!-- Navigasi Horizontal -->
     <nav class="footer-nav">
       <a href="#">Home</a>
       <a href="#">Blog</a>
       <a href="#">About</a>
       <a href="#">Contact</a>
     </nav>
-
     <span class="footer-copy">
       © 2026 All Rights Reserved. Design by Alister Media.
     </span>
-
   </div>
 </footer>
-
-<style>
-  /* --- Reset dasar (opsional, kalau belum ada) --- */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    font-family: sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* --- Footer container --- */
-  .footer-horizontal {
-    background-color: #1a3c34; /* hijau gelap tema pertanian */
-    color: #e0f2f1;
-    padding: 2rem 0;
-    margin-top: auto;
-    width: 100%;
-    border-top: 4px solid #4caf50;
-  }
-
-  .footer-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    flex-wrap: wrap;
-  }
-
-  .footer-brand {
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #66bb6a;
-  }
-
-  /* --- Navigasi Horizontal --- */
-  .footer-nav {
-    display: flex;              /* flex = horizontal secara default */
-    flex-direction: row;         /* eksplisit: dari kiri ke kanan */
-    justify-content: center;     /* posisi link di tengah */
-    align-items: center;        /* vertikal rapi tengah */
-    gap: 2rem;                  /* jarak antar link Home / Blog / About / Contact */
-  }
-
-  .footer-nav a {
-    text-decoration: none;
-    color: #a5d6a7;             /* hijau pucat */
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: color 0.3s ease;
-  }
-
-  .footer-nav a:hover {
-    color: #fdd835;             /* kuning panen saat hover */
-  }
-
-  .footer-copy {
-    font-size: 0.85rem;
-    color: #81c784;
-    border-left: 1px solid #3e6358;
-    padding-left: 1.5rem;
-  }
-
-  /* --- Mobile: biar tetap rapi kalau layar sempit --- */
-  @media (max-width: 768px) {
-    .footer-content {
-      flex-direction: column;
-      gap: 1.5rem;
-      text-align: center;
-    }
-
-    .footer-nav {
-      flex-direction: column;   /* tetap horizontal di desktop, vertikal di HP */
-      gap: 1rem;
-    }
-
-    .footer-copy {
-      border-left: none;
-      padding-left: 0;
-      border-top: 1px solid #3e6358;
-      padding-top: 1rem;
-      width: 100%;
-    }
-  }
-</style>
 
 <script src="script.js"></script>
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('sw.js').then(function(registration) {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                console.log('ServiceWorker registration successful');
             }, function(err) {
-                console.log('ServiceWorker registration failed: ', err);
+                console.log('ServiceWorker registration failed', err);
             });
         });
     }
