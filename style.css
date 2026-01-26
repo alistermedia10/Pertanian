@@ -11,34 +11,81 @@
     --glass: rgba(30, 30, 30, 0.9);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-body { background: var(--bg-app); color: var(--text); padding-bottom: 20px; overflow-x: hidden; transition: background 0.3s, color 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
-#app-container { max-width: 800px; margin: 0 auto; width: 100%; flex: 1; position: relative; }
+body { 
+    background: var(--bg-app); 
+    color: var(--text); 
+    /* Tambahkan padding bawah agar konten tidak tertutup bottom nav (kira-kira 70px) */
+    padding-bottom: 80px; 
+    overflow-x: hidden; 
+    transition: background 0.3s, color 0.3s; 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+}
+#app-container { max-width: 800px; margin: 0 auto; width: 100%; flex: 1; position: relative; padding: 0 16px; }
 
-/* --- HEADER & TOP NAV --- */
+/* --- TOPBAR (Header) --- */
 .topbar {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
-    color: white; padding: 20px;
-    border-bottom-left-radius: 24px; border-bottom-right-radius: 24px; 
-    box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
-    display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;
-    position: sticky; top: 0; z-index: 100;
+    color: white; 
+    padding: 15px 20px; /* Padding dikurangi karena tidak ada nav di bawahnya */
+    border-bottom-left-radius: 0; /* Sudut dibuat tajam untuk header standar */
+    border-bottom-right-radius: 0; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    position: sticky; top: 0; z-index: 90;
 }
-.topbar-logo { width: 40px; height: 40px; border-radius: 8px; object-fit: contain; background: white; padding: 2px; }
-.user-wallet { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); font-size: 0.9rem; margin-top: 5px; }
+.topbar-logo { width: 35px; height: 35px; border-radius: 6px; object-fit: contain; background: white; padding: 1px; }
+.user-wallet { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; backdrop-filter: blur(5px); }
 
-.top-nav { display: flex; gap: 10px; overflow-x: auto; padding-top: 15px; width: 100%; -ms-overflow-style: none; scrollbar-width: none; }
-.top-nav::-webkit-scrollbar { display: none; }
-.nav-item { 
-    flex: 0 0 auto; padding: 8px 16px; border-radius: 20px; background: rgba(255,255,255,0.2); 
-    color: white; font-size: 0.85rem; font-weight: 600; cursor: pointer; white-space: nowrap; 
-    transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; gap: 4px;
+/* --- BOTTOM NAVIGATION (Baru) --- */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    background: var(--bg-card);
+    display: flex;
+    justify-content: space-around; /* Jarak merata */
+    align-items: center;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+    z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom); /* Supaya tidak tertutup iPhone Home Bar */
 }
-.nav-item.active { background: var(--accent); color: black; box-shadow: 0 2px 8px rgba(0,0,0,0.2); border-color: var(--accent); font-weight: bold; }
-.nav-icon { font-size: 1.1rem; }
-.nav-label { font-size: 0.7rem; }
+
+.bottom-nav .nav-item {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 0.7rem;
+}
+
+.bottom-nav .nav-item .nav-icon {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+    transition: 0.2s;
+}
+
+.bottom-nav .nav-item.active {
+    color: var(--primary);
+}
+
+.bottom-nav .nav-item.active .nav-icon {
+    transform: translateY(-2px);
+}
 
 /* --- VIEWS --- */
-.view-section { display: none; padding: 0 16px; animation: fadeUp 0.4s ease; }
+.view-section { display: none; animation: fadeUp 0.3s ease; }
 .view-section.active { display: block; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -53,10 +100,10 @@ body { background: var(--bg-app); color: var(--text); padding-bottom: 20px; over
 .stat-lbl { font-size: 0.8rem; color: var(--text-muted); }
 .weather-card { background: linear-gradient(to right, #4facfe, #00f2fe); color: white; border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
 
-/* --- BLOG STYLES (UPDATED) --- */
+/* --- BLOG STYLES --- */
 .blog-header { 
     display: flex; justify-content: space-between; align-items: center; 
-    flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color, #eee); 
+    flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(0,0,0,0.05); 
 }
 .blog-header-text h3 { font-size: 1.2rem; margin: 0; color: var(--text); font-weight: 700; }
 .blog-header-text p { margin: 4px 0 0 0; font-size: 0.85rem; color: var(--text-muted); }
@@ -119,7 +166,7 @@ body { background: var(--bg-app); color: var(--text); padding-bottom: 20px; over
 .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3); }
 .btn-primary:active { transform: scale(0.98); }
 .btn-outline { background: white; border: 2px solid var(--primary); color: var(--primary); }
-.fab { position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: black; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 5px 15px rgba(251, 192, 45, 0.5); cursor: pointer; z-index: 90; }
+.fab { position: fixed; bottom: 80px; right: 20px; background: var(--accent); color: black; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 5px 15px rgba(251, 192, 45, 0.5); cursor: pointer; z-index: 95; }
 .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(4px); }
 .modal.active { display: flex; }
 .modal-box { background: var(--bg-card); width: 90%; max-width: 400px; border-radius: 20px; padding: 20px; max-height: 85vh; overflow-y: auto; animation: zoomIn 0.3s; }
@@ -137,9 +184,9 @@ select.form-input, textarea.form-input { background: var(--bg-card); }
 .tool-chip.active { background: var(--accent); color: black; font-weight: bold; border-color: var(--accent); }
 .calc-result { background: var(--primary); color: white; padding: 15px; border-radius: 12px; margin-top: 15px; display: none; }
 
-/* --- FOOTER --- */
+/* --- FOOTER HORIZONTAL (Alister Media) --- */
 .footer-horizontal {
-    background-color: #1a3c34; color: #e0f2f1; padding: 2rem 0; margin-top: auto; width: 100%; border-top: 4px solid #4caf50;
+    background-color: #1a3c34; color: #e0f2f1; padding: 2rem 0; margin-top: 40px; width: 100%; border-top: 4px solid #4caf50;
 }
 .footer-content { display: flex; justify-content: center; align-items: center; gap: 3rem; max-width: 800px; margin: 0 auto; padding: 0 20px; flex-wrap: wrap; }
 .footer-brand { font-weight: 700; font-size: 1.2rem; color: #66bb6a; }
