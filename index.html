@@ -13,21 +13,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="monetag" content="6d308d653be90834334a547a6a6d45b6">
   <!-- Monetag Script -->
-  <script>
-//<![CDATA[
+ <script>
 if ('serviceWorker' in navigator) {
-    // Penjelasan:
-    // './sw.js' artinya cari di folder yang sama dengan file ini
-    // scope: './' memastikan SW mengontrol seluruh halaman
+    // Menggunakan './sw.js' agar cocok dengan Project Site GitHub
     navigator.serviceWorker.register('./sw.js', { scope: './' })
     .then(function(reg) {
-        console.log('Service Worker Monetag aktif! Scope:', reg.scope);
+        console.log('Service Worker terdaftar dengan ID Zone:', 10558898);
     })
     .catch(function(err) {
-        console.log('Gagal daftar SW:', err);
+        console.log('Error Service Worker:', err);
     });
 }
-//]]>
 </script>
 </head>
 <body>
