@@ -11,6 +11,25 @@
     <meta name="theme-color" content="#2e7d32">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Monetag Script -->
+  <script>
+  if ('serviceWorker' in navigator) {
+      const swCode = `
+          self.options = {
+              "domain": "5gvci.com",
+              "zoneId": 10558898
+          };
+          self.lary = "";
+          importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+
+      navigator.serviceWorker.register(swUrl)
+      .then(reg => console.log('Service Worker registered!'))
+      .catch(err => console.log('Service Worker failed:', err));
+  }
+  </script>
 </head>
 <body>
 
