@@ -14,23 +14,21 @@
 <meta name="monetag" content="6d308d653be90834334a547a6a6d45b6">
   <!-- Monetag Script -->
   <script>
-  if ('serviceWorker' in navigator) {
-      const swCode = `
-          self.options = {
-              "domain": "5gvci.com",
-              "zoneId": 10558898
-          };
-          self.lary = "";
-          importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
-      `;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      const swUrl = URL.createObjectURL(blob);
-
-      navigator.serviceWorker.register(swUrl)
-      .then(reg => console.log('Service Worker registered!'))
-      .catch(err => console.log('Service Worker failed:', err));
-  }
-  </script>
+//<![CDATA[
+if ('serviceWorker' in navigator) {
+    // Penjelasan:
+    // './sw.js' artinya cari di folder yang sama dengan file ini
+    // scope: './' memastikan SW mengontrol seluruh halaman
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
+    .then(function(reg) {
+        console.log('Service Worker Monetag aktif! Scope:', reg.scope);
+    })
+    .catch(function(err) {
+        console.log('Gagal daftar SW:', err);
+    });
+}
+//]]>
+</script>
 </head>
 <body>
 
