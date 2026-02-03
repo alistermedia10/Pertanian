@@ -1,22 +1,11 @@
-const CACHE_NAME = 'alister-agri-v1';
-const ASSETS = [
-    './',
-    './index.html',
-    './style.css',
-    './script.js',
-    './manifest.json',
-    './icon-192.png',
-    './icon-152.png'
-];
+// Hapus semua kode PWA (Install, Activate, Fetch) sebelumnya
+// Ganti dengan kode Monetag Murni
 
-self.addEventListener('install', (e) => {
-    e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
-});
+self.options = {
+    "domain": "5gvci.com",
+    "zoneId": 10558656
+};
 
-self.addEventListener('activate', (e) => {
-    e.waitUntil(caches.keys().then((keys) => Promise.all(keys.map((key) => key !== CACHE_NAME ? caches.delete(key) : null))));
-});
+self.lary = "";
 
-self.addEventListener('fetch', (e) => {
-    e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
-});
+importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw');
